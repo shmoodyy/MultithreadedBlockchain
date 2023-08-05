@@ -1,0 +1,11 @@
+# Project exclude paths
+/.gradle/
+/Blockchain (Java)/task/build/
+/Blockchain (Java)/task/out/
+/Blockchain (Java)/task/out/production/classes/
+/Topics/Currying/Curried function/out/
+/Topics/Currying/Curried function/out/production/classes/
+/Topics/Currying/Multifunctional mapper/out/
+/Topics/Currying/Multifunctional mapper/out/production/classes/
+/Topics/Currying/String concatenation/out/
+/Topics/Currying/String concatenation/out/production/classes/
