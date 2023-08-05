@@ -11,6 +11,7 @@ import java.util.concurrent.*;
 import java.util.stream.IntStream;
 
 public class Main {
+
     static final String DIRECTORY = System.getProperty("user.dir") + File.separator;
 
     public static void main(String[] args) throws Exception {
@@ -90,6 +91,10 @@ public class Main {
 
             // Get the result of the first completed task
             Block minedBlock = completedBlock;
+            minedBlock.setId(i + 1);
+            minedBlock.setMinerId(completedTaskIndex + 1); // Set the miner ID for the mined block
+            int currentBalance = ledger.get("miner" + minedBlock.getMinerId());
+            ledger.put("miner" + minedBlock.getMinerId(), currentBalance + 100);
 
             int copiedI = i;
             CompletableFuture<Void> future1 = CompletableFuture.runAsync(() -> {
@@ -108,15 +113,12 @@ public class Main {
             CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(future1, future2);
             combinedFuture.join();
 
-            prefixLength = updateMinedBlock(prefixLength, i, completedTaskIndex, minedBlock);
+            prefixLength = updateHashPrefixLength(prefixLength, minedBlock);
             blockchain.add(minedBlock);
         }
     }
 
-    private static int updateMinedBlock(int prefixLength, int i, int completedTaskIndex, Block minedBlock) {
-        minedBlock.setId(i + 1);
-
-        minedBlock.setMinerId(completedTaskIndex + 1); // Set the miner ID for the mined block
+    private static int updateHashPrefixLength(int prefixLength, Block minedBlock) {
         if (minedBlock.getDuration() / 1000.00 < 0.1) {
             minedBlock.setPrefixLength("N was increased to " + (++prefixLength));
         } else if (minedBlock.getDuration() / 1000.00 > 1.0) {
